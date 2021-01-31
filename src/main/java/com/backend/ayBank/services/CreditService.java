@@ -3,9 +3,11 @@ package com.backend.ayBank.services;
 import com.backend.ayBank.shared.dto.CreditDto;
 import com.backend.ayBank.shared.dto.UserDto;
 
-public interface CreditService {
-    CreditDto createCredit(CreditDto creditDto);
-    CreditDto adminUpdateCredit(String idCredit, CreditDto creditDto);
+import java.util.List;
 
+public interface CreditService {
+    CreditDto createCredit(CreditDto creditDto, String email);
+    CreditDto adminUpdateCredit(String idCredit, CreditDto creditDto);
+    List<CreditDto> getAllCredit( String email);
 
 }

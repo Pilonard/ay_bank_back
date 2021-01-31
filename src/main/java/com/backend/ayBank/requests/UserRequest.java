@@ -14,6 +14,7 @@ public class UserRequest implements Serializable {
 
     private String firstName;
     private String lastName;
+    private Boolean admin;
     private String email;
     private String password;
     private List<CreditRequest> credits;

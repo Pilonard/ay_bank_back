@@ -6,11 +6,19 @@ import com.backend.ayBank.responses.CreditResponse;
 import com.backend.ayBank.responses.UserResponse;
 import com.backend.ayBank.services.CreditService;
 import com.backend.ayBank.shared.dto.CreditDto;
+import com.backend.ayBank.utils.ModelMapperUtil;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.lang.reflect.Type;
+import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/credit")
@@ -21,30 +29,32 @@ public class CreditController {
     CreditService creditService;
 
     // database ( email/N compte + annuity/capital/duration/rate + state(accepted/waiting/refused)
-//    @GetMapping
-//    public UserResponse createCredit(){
-//        return null;
-//    }
+    @GetMapping
+    public ResponseEntity<List<CreditResponse>> getALlCredit(Principal principal){
+        List<CreditDto> creditDtoList = creditService.getAllCredit(principal.getName());
+        Type listType = new TypeToken<List<CreditResponse>>(){}.getType();
+        List<CreditResponse> listCredits = ModelMapperUtil.modelMapper().map(creditDtoList,listType);
+        return new ResponseEntity<>(listCredits, HttpStatus.OK);
+    }
 
     @PutMapping
     public CreditResponse updateCredit(String idCredit, @RequestBody CreditDto creditDto){
         return null;
     }
     @PostMapping
-    public CreditResponse postCredit(@RequestBody CreditRequest creditRequest){
+    public ResponseEntity<CreditResponse> postCredit(@RequestBody CreditRequest creditRequest,Principal principal){
         ModelMapper modelMapper = new ModelMapper();
-        modelMapper.getConfiguration()
-                .setMatchingStrategy(MatchingStrategies.STRICT);
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
         CreditDto creditDto = modelMapper.map(creditRequest, CreditDto.class);
 //        BeanUtils.copyProperties(creditRequest, creditDto);
 
-
-        CreditDto credit = creditService.createCredit(creditDto);
+        CreditDto credit = creditService.createCredit(creditDto, principal.getName());
 
         CreditResponse creditResponse =modelMapper.map(credit,CreditResponse.class);
 //        BeanUtils.copyProperties(credit, creditResponse);
 
-        return creditResponse;
+        return new ResponseEntity<>(creditResponse,HttpStatus.CREATED);
     }
 //    @GetMapping
 //    public UserResponse putCredit(){

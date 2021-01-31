@@ -67,6 +67,6 @@ public class AuthenticationFilter  extends UsernamePasswordAuthenticationFilter 
         UserDto userDto = userService.getUser(userName);
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         response.addHeader("user_id", userDto.getUserId());
-//        res.getWriter().write("{\"token\""+token+"\", \"id\"; \"");
+        response.getWriter().write("{\"token\""+token+"\", \"id\"; \"");
     }
 }
