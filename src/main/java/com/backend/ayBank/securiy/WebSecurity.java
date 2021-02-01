@@ -9,7 +9,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "*")
 @EnableWebSecurity
 public class WebSecurity  extends WebSecurityConfigurerAdapter {
 //    @Autowired
@@ -30,7 +32,8 @@ public class WebSecurity  extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST,SecurityConstants.SIGN_UP_URL).permitAll()
-                .antMatchers(HttpMethod.POST,"/credit").permitAll()
+                .antMatchers("/credit/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/user/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(getAuthenticationFilter()) // the attemp authenticaterFilt will be executed

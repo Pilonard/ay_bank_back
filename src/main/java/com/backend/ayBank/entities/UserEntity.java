@@ -28,6 +28,8 @@ public class UserEntity implements Serializable {
     @Column(nullable = false)
     private String password;
     @Column(nullable = true)
+    private String imgProfile;
+    @Column(nullable = true)
     private String encryptedPassword;
     @Column(nullable = true)
     private String emailVerificationToken;

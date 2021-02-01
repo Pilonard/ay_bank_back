@@ -19,8 +19,8 @@ public class CreditEntity {
     private Double capital;
     private String typeCredit;
     private Long duration;
-    private String imgProfile;
     private Double salary;
+    private String creditState= "being processed";
     @JoinColumn(name= "users_id",referencedColumnName = "id")
     @ManyToOne
     private UserEntity user;

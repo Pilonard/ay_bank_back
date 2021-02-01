@@ -12,9 +12,8 @@ public class CreditDto {
     private Double capital;
     private String typeCredit;
     private Long duration;
-    private String imgProfile;
     private Double salary;
-
+    private String creditState;
     private UserDto user;
 
 

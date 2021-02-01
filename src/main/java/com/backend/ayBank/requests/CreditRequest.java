@@ -14,7 +14,7 @@ public class CreditRequest {
     private Double capital;
     private String typeCredit;
     private Long duration;
-    private String imgProfile;
     private Double salary;
+    private String creditState;
 
 }

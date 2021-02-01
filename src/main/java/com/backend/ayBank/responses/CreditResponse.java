@@ -16,4 +16,5 @@ public class CreditResponse {
     private String typeCredit;
     private Long duration;
     private Double salary;
+    private String creditState;
 }
