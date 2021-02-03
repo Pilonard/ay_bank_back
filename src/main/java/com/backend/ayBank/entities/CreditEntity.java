@@ -20,7 +20,8 @@ public class CreditEntity {
     private String typeCredit;
     private Long duration;
     private Double salary;
-    private String creditState= "being processed";
+    @Column( columnDefinition = "varchar(255) default 'being processed'")
+    private String creditState;
     @JoinColumn(name= "users_id",referencedColumnName = "id")
     @ManyToOne
     private UserEntity user;

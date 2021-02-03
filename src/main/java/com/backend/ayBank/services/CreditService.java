@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface CreditService {
     CreditDto createCredit(CreditDto creditDto, String email);
-    CreditDto adminUpdateCredit(String idCredit, CreditDto creditDto);
+    CreditDto adminUpdateCredit(CreditDto creditDto);
     List<CreditDto> getAllCredit( String email);
 
 }

@@ -10,7 +10,7 @@ public class CreditDto {
     private String idCredit;
     private Double annuity;
     private Double capital;
-    private String typeCredit;
+    private String typeCredit = "being processed";
     private Long duration;
     private Double salary;
     private String creditState;

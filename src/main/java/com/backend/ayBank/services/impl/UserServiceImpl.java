@@ -5,7 +5,9 @@ import com.backend.ayBank.repositories.UserRepository;
 import com.backend.ayBank.services.UserService;
 import com.backend.ayBank.shared.dto.CreditDto;
 import com.backend.ayBank.shared.dto.UserDto;
+import com.backend.ayBank.utils.ModelMapperUtil;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +17,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -80,6 +84,24 @@ public class UserServiceImpl implements UserService {
 //        BeanUtils.copyProperties(userEntity, userDto);
         return userDto;
     }
+
+    @Override
+    public List<UserDto> getAllUser() {
+        /*
+        get user without admin
+        List<UserEntity> users = userRepository.findAllByAdmin(false);
+         */
+        /*
+        get Users and admins
+         */
+        List<UserEntity> users = userRepository.findAll();
+        if(users == null) throw new RuntimeException();
+        Type listType = new TypeToken<List<UserDto>>(){}.getType();
+        List<UserDto> userDtos = ModelMapperUtil.modelMapper().map(users,listType);
+
+        return userDtos;
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

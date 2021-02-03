@@ -33,7 +33,7 @@ public class CreditServiceImpl implements CreditService {
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         UserDto userDto = modelMapper.map(currentUser,UserDto.class);
-        //credit.setIdCredit(UUID.randomUUID().toString().substring(0,20));
+        credit.setIdCredit(UUID.randomUUID().toString().substring(0,20));
         credit.setUser(userDto);
         CreditEntity creditEntity = modelMapper.map(credit,CreditEntity.class);
 //        BeanUtils.copyProperties(credit,creditEntity);
@@ -44,10 +44,14 @@ public class CreditServiceImpl implements CreditService {
     }
 
     @Override
-    public CreditDto adminUpdateCredit(String idCredit, CreditDto credit) {
-        CreditEntity creditEntity = creditRepository.findByIdCredit(idCredit);
-        if(creditEntity == null) throw new UsernameNotFoundException(idCredit);
-        creditEntity.setTypeCredit(credit.getTypeCredit());
+    public CreditDto adminUpdateCredit( CreditDto credit) {
+        System.out.println("hello i am admin updateCredit" + credit.getCreditState());
+//        CreditEntity creditEntity = creditRepository.findByIdCredit(idCredit);
+        CreditEntity creditEntity = creditRepository.findByIdCredit(credit.getIdCredit());
+        System.out.println("credit entity is enmpty ?" + creditEntity);
+        if(creditEntity == null) throw new UsernameNotFoundException(credit.getIdCredit());
+        creditEntity.setCreditState(credit.getCreditState());
+        System.out.println("new value of type credit" + credit.getCreditState());
 
         creditRepository.save(creditEntity);
         ModelMapper modelMapper = new ModelMapper();

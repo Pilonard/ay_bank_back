@@ -40,6 +40,7 @@ public class CreditController {
 
     Map<String,Double> valueOfType = new HashMap<>();
 
+
     // database ( email/N compte + annuity/capital/duration/typeCredit + state(accepted/waiting/refused)
     @GetMapping
     public ResponseEntity<List<CreditResponse>> getALlCredit(Principal principal){
@@ -50,11 +51,28 @@ public class CreditController {
     }
 
     @PutMapping
-    public CreditResponse updateCredit(String idCredit, @RequestBody CreditDto creditDto){
-        return null;
+    public ResponseEntity<CreditResponse> updateCredit( @RequestBody CreditRequest creditRequest){
+        System.out.println("hello i am in controler updateCredit" + creditRequest.getCreditState());
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
+        CreditDto creditDto = modelMapper.map(creditRequest, CreditDto.class);
+        CreditDto creditUpdated = creditService.adminUpdateCredit(creditDto);
+        CreditResponse creditResponse = modelMapper.map(creditUpdated , CreditResponse.class);
+
+
+        return new ResponseEntity<>(creditResponse,HttpStatus.ACCEPTED);
     }
     @PostMapping
     public ResponseEntity<CreditResponse> postCredit(@RequestBody CreditRequest creditRequest,Principal principal){
+        /*
+        initialise state of credit if it's null
+         */
+        if(creditRequest.getCreditState() == null) {
+            creditRequest.setCreditState("being processed");
+        }
+
+
         ModelMapper modelMapper = new ModelMapper();
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
@@ -97,7 +115,7 @@ public class CreditController {
 
     @GetMapping("/capitalP/{annuity}/{typeCredit}/{duration}")
     public double processCapital(
-            @PathVariable(name ="capital") double annuity,
+            @PathVariable(name ="annuity") double annuity,
             @PathVariable(name ="typeCredit") String typeCredit,
             @PathVariable(name ="duration") long duration){
         double typeCreditF=annuelle(typeCredit);
@@ -116,22 +134,22 @@ public class CreditController {
             @PathVariable(name ="typeCredit") String typeCredit
           ){
         double typeCreditF=annuelle(typeCredit);
-     return  (long) (((Math.log(annuity/(annuity-typeCreditF*capital)))/(Math.log(1+typeCreditF))) +0.5);
+     return   (long) (((Math.log(annuity/(annuity-typeCreditF*capital)))/(Math.log(1+typeCreditF))) +0.5);
 
     }
 
 
 
 
-
+// [Log] http://localhost:8080/credit/capitalP/2300/Commercialandindustrialloans/100 (main.js, line 1486)
 
 
     public double annuelle(String typeCredit) {
-        valueOfType .put("Financialinstitutionloans",0.5);
-        valueOfType .put("Agriculturalloans",0.45);
-        valueOfType.put("Commercialandindustrialloans",0.6);
-        valueOfType.put("Loanstoindividuals",0.5);
-        valueOfType.put("Realestateloans",0.7);
+        valueOfType .put("Financialinstitutionloans",0.05);
+        valueOfType .put("Agriculturalloans",0.045);
+        valueOfType.put("Commercialandindustrialloans",0.06);
+        valueOfType.put("Loanstoindividuals",0.05);
+        valueOfType.put("Realestateloans",0.07);
 
         return Math.pow(1 + valueOfType.get(typeCredit),(double)1/12)-1;
     }

@@ -64,11 +64,13 @@ public class AuthenticationFilter  extends UsernamePasswordAuthenticationFilter 
                 .setSubject(userName)
                 .claim("id",userDto.getUserId())
                 .claim("admin",userDto.getAdmin())
+                .claim("firstName", userDto.getFirstName())
+                .claim(("lastName"), userDto.getLastName())
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET )
                 .compact();
         response.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         response.addHeader("user_id", userDto.getUserId());
-        response.getWriter().write("{\"token\":\""+token+"\", \"id\":\""+userDto.getUserId()+"\"}");
+        response.getWriter().write("{\"token\":\""+token+"\", \"id\":\""+userDto.getUserId()+"\", \"admin\":\""+userDto.getAdmin()+"\", \"lastName\":\""+userDto.getLastName()+"\", \"firstName\":\""+userDto.getFirstName()+"\"}");
     }
 }

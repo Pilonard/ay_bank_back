@@ -19,8 +19,8 @@ public class UserEntity implements Serializable {
     private String userId;
     @Column(nullable = false,length = 50)
     private String firstName;
-    @Column(nullable = true)
-    private Boolean admin;
+    @Column( columnDefinition = "boolean default false")
+    private Boolean admin ;
     @Column(nullable = false,length = 50)
     private String lastName;
     @Column(nullable = false,length = 100,unique = true)
